@@ -1,0 +1,225 @@
+# JovianX API Compatibility
+# v1
+jovianx_api_version: v1
+
+# Name of this SaaS application
+# string
+application_name: hello-world-app
+
+# version of this JovianX blueprint
+# semantic versioning
+version: 0.1.0
+
+application_launch_timeout:
+  tries_count: 120
+  seconds_between_tries: 5
+
+main_endpoint_component: node-component
+
+components:
+  - name: node-component
+    version: 1.0.0
+    provider: helm_chart 
+    # name of the helm chart direcotry
+    helm_chart_name: node-chart
+    # custom Values.yaml filename
+    helm_values_file: values-jovianx.yaml
+    # configure values for helm --set key=value 
+    helm_set:
+      - key: repository
+        value: https://gitlab.com/jovianx-saas-platform/hello-world-app.git
+      - key: replicas
+        value: 1
+      - key: vendor_company
+        value: '{{ account://vendor_company }}'
+      - key: end_company
+        value: '{{ account://end_company }}'
+      - key: account_api_key
+        value: '{{ account://account_api_key }}'
+      - key: admin_email
+        value: '{{ account://admin_email }}'
+      - key: admin_password
+        value: '{{ account://admin_password }}'
+      - key: api_host
+        value: '{{ account://api_host }}'
+      - key: my_db_conn_string
+        value: mongo://{{application://components/mongodb-component/helm_release_name}}
+      - key: DATABASE_HOST
+        value: "{{application://components/mongodb-component/helm_release_name}}.{{ account://shared_components_namespace }}"
+    # configure values for helm --set-file <filename> 
+    helm_set_files:
+      - key: file_parameter_1
+        path: values/file1
+      - key: file_parameter_2
+        path: values/file2
+    # Endpoints are links(entrypoiny) in the customer console, you can also automatically redirect the end-user to the entrypoiny.
+    endpoints:
+      - name: 'application_web_interface'
+        service_name: '{{application://components/node-component/helm_release_name}}-node'
+        type: entry_point
+        entry_point_url: 'http://{{ account://end_company }}.cloud.yourdomain.com/app'
+        # dns directive allows automatically cerate a DNS record 
+        dns: '{{ account://end_company }}.cloud.yourdomain.com'
+        port: 80
+        path: /app
+
+  - name: mongodb-component
+    version: 1.0.0
+    provider: helm_chart 
+    helm_chart_name: mongodb-chart
+    # Configure cross account shared-component
+    deploy_per: application 
+    helm_set:
+      - key: mongodbUsername
+        value: user
+      - key: mongodbDatabase
+        value: test_db
+    endpoints:
+      - name: 'mongo_private'
+        service_name: '{{ application://components/mongodb-component/helm_release_name }}'
+        port: 27017
+        type: entry_point
+
+settings_descriptors:
+  - name: switch_option_1
+    display: 'Enable suer cool feature'
+    description: 'This option will enable or disable your super cool feature cool_feature by passing a feature flag.'
+    input_type: checkbox
+    default: false
+    select_options:
+      - name: true
+        components:
+          - name: node-component
+            helm_set:
+              - key: cool_feature
+                value: true
+      - name: false
+        components:
+          - name: node-component
+            helm_set:
+              - key: cool_feature
+                value: false
+
+  - name: radio_selection_with_images
+    display: 'Select one of these radio(w. images) options:'
+    description: 'This allows selecting an option from a visual selection with images'
+    input_type: radio
+    default: radion_option_1
+    description_title: 'Choose your option'
+    # Dependency: Display this option only if switch_option_1 is true
+    dependency:
+      name: switch_option_1
+      values:
+        - true
+    select_options:
+      - name: radion_option_1
+        display: 'Microsoft Azure'
+        img: 'https://www.mongodb.com/assets/images/cloud/atlas/logos/azure.png'
+        components:
+          - name: node-component
+            helm_set:
+              - key: cloudProvider
+                value: azure
+      - name: radion_option_2
+        display: 'Amazon Web Services'
+        img: 'https://www.mongodb.com/assets/images/cloud/atlas/logos/aws.png'
+        components:
+          - name: node-component
+            helm_set:
+              - key: cloudProvider
+                value: aws
+      - name: radion_option_3
+        display: 'Google Cloud Platform'
+        img: 'https://www.mongodb.com/assets/images/cloud/atlas/logos/gcp.png'
+        components:
+          - name: node-component
+            helm_set:
+              - key: cloudProvider
+                value: gcp
+
+  - name: selection_option
+    display: 'Selection from dropdown'
+    input_type: select
+    default: select_option_1
+    description: 'Select an option from a dropdown menu.'
+    select_options:
+      - name: select_option_1
+        display: 'Option 1'
+        components:
+          - name: node-component
+            helm_set:
+              - key: select_feature_is
+                value: option_1
+      - name: select_option_2
+        display: 'Next business day support'
+        components:
+          - name: node-component
+            helm_set:
+              - key: select_feature_is
+                value: option_2
+      - name: select_option_3
+        display: 'support 24/7'
+        enabled: false
+        components:
+          - name: node-component
+            helm_set:
+              - key: select_feature_is
+                value: option_3
+
+  - name: number_input_1
+    display: 'Number of months for support'
+    description: 'For how long support should be provided'
+    input_type: number
+    # min_value: 1
+    # max_value: 10
+    default: 3
+    components:
+      - name: node-component
+        helm_set:
+          - key: months
+
+  - name: moto
+    display: 'Company motto'
+    description: 'This is just an example of string input'
+    input_type: string
+    # max_length: 50
+    default: 'just do it'
+    components:
+      - name: node-component
+        helm_set:
+          - key: moto
+
+  - name: slider_1
+    display: 'Slide to choose from range'
+    description: 'Select how much space you need'
+    input_type: slider
+    units: GB
+    min_value: 0.5
+    max_value: 2000
+    step: 0.5
+    default: 500
+    components:
+      - name: node-component
+        helm_set:
+          - key: value_from_slider
+
+hooks:
+  pre_install:
+    - name: pre-install-hook
+      on_failure: continue # continue | stop
+      timeout: 120
+      provider: docker
+      image: 'appropriate/curl'
+      command: ['/bin/sh', '-c']
+      args:
+        - ping -c 3 google.com
+        - ping -c 3 stackoverflow.com
+        - ping -c 3 gitlab.com
+
+  post_install:
+    - name: post-install-user-add
+      provider: docker
+      image: 'appropriate/curl'
+      command: ['/bin/sh', '-c']
+      args:
+        - curl {{ application://endpoints/application_web_interface/ip }}/api/add_user?user={{ account://admin_email }}&password={{ account://admin_password }}
