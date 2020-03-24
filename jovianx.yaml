@@ -8,7 +8,7 @@ application_name: hello-world-app
 
 # version of this JovianX blueprint
 # semantic versioning
-version: 0.1.0
+version: 1.0.0
 
 application_launch_timeout:
   tries_count: 120
@@ -82,8 +82,8 @@ components:
 
 settings_descriptors:
   - name: switch_option_1
-    display: 'Enable suer cool feature'
-    description: 'This option will enable or disable your super cool feature cool_feature by passing a feature flag.'
+    display: 'Enable super cool feature'
+    description: 'This option will enable or disable your super cool feature cool_feature.'
     input_type: checkbox
     default: false
     select_options:
@@ -101,7 +101,7 @@ settings_descriptors:
                 value: false
 
   - name: radio_selection_with_images
-    display: 'Select one of these radio(w. images) options:'
+    display: 'Selection dependent on another choise'
     description: 'This allows selecting an option from a visual selection with images'
     input_type: radio
     default: radion_option_1
@@ -113,7 +113,7 @@ settings_descriptors:
         - true
     select_options:
       - name: radion_option_1
-        display: 'Microsoft Azure'
+        display: 'Option 1'
         img: 'https://www.mongodb.com/assets/images/cloud/atlas/logos/azure.png'
         components:
           - name: node-component
@@ -121,7 +121,7 @@ settings_descriptors:
               - key: cloudProvider
                 value: azure
       - name: radion_option_2
-        display: 'Amazon Web Services'
+        display: 'Option 2'
         img: 'https://www.mongodb.com/assets/images/cloud/atlas/logos/aws.png'
         components:
           - name: node-component
@@ -129,7 +129,7 @@ settings_descriptors:
               - key: cloudProvider
                 value: aws
       - name: radion_option_3
-        display: 'Google Cloud Platform'
+        display: 'Option 3'
         img: 'https://www.mongodb.com/assets/images/cloud/atlas/logos/gcp.png'
         components:
           - name: node-component
@@ -138,7 +138,7 @@ settings_descriptors:
                 value: gcp
 
   - name: selection_option
-    display: 'Selection from dropdown'
+    display: 'Select this option from from dropdown'
     input_type: select
     default: select_option_1
     description: 'Select an option from a dropdown menu.'
@@ -151,15 +151,15 @@ settings_descriptors:
               - key: select_feature_is
                 value: option_1
       - name: select_option_2
-        display: 'Next business day support'
+        display: 'Option 2'
         components:
           - name: node-component
             helm_set:
               - key: select_feature_is
                 value: option_2
       - name: select_option_3
-        display: 'support 24/7'
-        enabled: false
+        display: 'Option 3 (Disabled option)'
+        enabled: false # This disables the option
         components:
           - name: node-component
             helm_set:
@@ -167,8 +167,8 @@ settings_descriptors:
                 value: option_3
 
   - name: number_input_1
-    display: 'Number of months for support'
-    description: 'For how long support should be provided'
+    display: 'Number input'
+    description: 'This is a numeric user input we can collect on sign-up.'
     input_type: number
     # min_value: 1
     # max_value: 10
@@ -179,7 +179,7 @@ settings_descriptors:
           - key: months
 
   - name: moto
-    display: 'Company motto'
+    display: 'Motto String'
     description: 'This is just an example of string input'
     input_type: string
     # max_length: 50
@@ -191,13 +191,13 @@ settings_descriptors:
 
   - name: slider_1
     display: 'Slide to choose from range'
-    description: 'Select how much space you need'
+    description: 'Select how many bananas you want'
     input_type: slider
-    units: GB
-    min_value: 0.5
-    max_value: 2000
-    step: 0.5
-    default: 500
+    units: Bananas
+    min_value: 1
+    max_value: 100
+    step: 1
+    default: 50
     components:
       - name: node-component
         helm_set:
