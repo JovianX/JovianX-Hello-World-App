@@ -8,9 +8,10 @@ The applicaiotn manifest has 2 main sections: the first is `Components` which de
 
 Review the application manifest yaml file: 
 
-```shell
+```bash
 $ cat hello-world-saas-app/jovianx.yaml
-
+```
+```yaml
 # JovianX API Compatibility
 # v1
 jovianx_api_version: v1
