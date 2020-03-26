@@ -1,4 +1,6 @@
 # Hello SaaS World App
+![JovianX Overview](images/JovianX-ProductOverview.png)
+
 
 # Step 1 - Review applicaiton manifest(Jovianx.yaml)
 First, review the application manifest YAML files (a file named [`jovianx.yaml`](https://github.com/jovian-x/hello-world-saas-app/blob/master/jovianx.yaml)). 
