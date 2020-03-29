@@ -1,11 +1,11 @@
 # Hello SaaS World App
 
-[What Is JovianX](https://docs.jovianx.com/#what-is-jovianx)
-
-## What is JovianX?
+## [What is JovianX?](https://docs.jovianx.com/#what-is-jovianx)
 JovianX Platform for SaaS is a cloud application platform(aPaaS) for SaaS applications,  allowing to build, and manage SaaS products, and managed services.
 JovianX provides SaaS back-office management, with a rich set of services to build, run and manage a SaaS product. Including: Cloud Management, Payments and Billing, Subscription Management, Multi-Tenancy, Application Life-cycle Management, Monitoring and Logging, Hosted Signup/Login page, User Signup Designer, Authenticated application end-points and much much more.
 ![JovianX Overview](images/JovianX-ProductOverview.png)
+
+[Getting Started with JovianX](https://docs.jovianx.com/getting-started-on-jovianx)
 
 
 # Step 1 - Review applicaiton manifest(Jovianx.yaml)
